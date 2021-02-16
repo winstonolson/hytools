@@ -8,6 +8,7 @@ import hytools as ht
 from hytools.io.envi import *
 from hytools.topo import calc_topo_coeffs
 from hytools.brdf import calc_brdf_coeffs
+from hytools.misc import outlier_dect
 
 warnings.filterwarnings("ignore")
 np.seterr(divide='ignore', invalid='ignore')
@@ -36,9 +37,11 @@ def main():
     elif config_dict['file_type'] == 'neon':
         _ = ray.get([a.read_file.remote(image,config_dict['file_type']) for a,image in zip(actors,images)])
 
-    #Here is where the outlier detection should probably happen.
-
     _ = ray.get([a.create_bad_bands.remote(config_dict['bad_bands']) for a in actors])
+
+    #Print outliter for now
+    if config_dict['outlier']['detect']:
+        outliers = outlier_dect(actors,config_dict)
 
     for correction in config_dict["corrections"]:
         if correction =='topo':
@@ -54,7 +57,7 @@ def main():
         print("Exporting corrected images.")
         _ = ray.get([a.do.remote(apply_corrections,config_dict) for a in actors])
 
-    ray.shutdown()
+    #ray.shutdown()
 
 def export_coeffs(hy_obj,export_dict):
     '''Export correction coefficients to file.

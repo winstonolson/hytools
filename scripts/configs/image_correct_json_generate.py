@@ -41,12 +41,12 @@ config_dict['file_type'] = 'envi'
 aviris_anc_names = ['path_length','sensor_az','sensor_zn',
                     'solar_az', 'solar_zn','phase','slope',
                     'aspect', 'cosine_i','utc_time']
-images= glob.glob("*img")
+images= glob.glob("/home/chlus/dev_hytools/data/yose/*img")
 images.sort()
 config_dict["input_files"] = images
 
 config_dict["anc_files"] = {}
-anc_files = glob.glob("*ort")
+anc_files = glob.glob("/home/chlus/dev_hytools/data/yose/*ort")
 anc_files.sort()
 for i,image in enumerate(images):
     config_dict["anc_files"][image] = dict(zip(aviris_anc_names,
@@ -66,8 +66,34 @@ config_dict['export']['coeffs']  = True
 config_dict['export']['image']  = True
 config_dict['export']['subset_waves']  = [660,550,440,850]
 config_dict['export']['output_dir'] ="/home/chlus/dev_hytools/data/output/"
-config_dict['export']["suffix"] = 'brdf'
+config_dict['export']["suffix"] = 'uncorr'
 
+
+# Outlier detect
+#################################################################
+''' Perform flightline outline detection prior to corrections.
+
+    If 'detect' == False, this step will be skipped.
+
+    - Options for 'threshold':
+        -'auto': threshold will be 0.7 * max(distance)
+                 from scipy.cluster.hierarchy.dendrogram
+        - float :  User provided threshold, 0.85 recommended.
+
+    - If 'dendogram' == True will export plot of dendrogram.
+
+    - 'mask' determines which pixels will be used in PCA transform
+    - 'sample_perc' : percent of unmasked pixels to sample for PCA
+
+
+'''
+config_dict['outlier'] = {}
+config_dict['outlier']['detect'] = True
+config_dict['outlier']['threshold'] = 'auto'
+config_dict['outlier']['dendrogram'] = True
+config_dict['outlier']['mask'] = [["ndi", {'band_1': 850,'band_2': 660,
+                                             'min': 0.1,'max': 1.0}]]
+config_dict['outlier']['sample_perc'] = 0.025
 #Corrections
 #################################################################
 ''' Specify correction(s) to be applied, corrections will be applied
@@ -83,7 +109,7 @@ Options include:
 
 '''
 
-config_dict["corrections"]  = ['brdf']
+config_dict["corrections"]  = []
 
 #Topographic Correction options
 #################################################################

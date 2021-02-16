@@ -1,13 +1,13 @@
 ''' Outlier detection functions
 '''
 
-import string
 from itertools import groupby
 import pandas as pd
 from sklearn.decomposition import PCA
-from scipy.cluster.hierarchy import dendrogram, linkage,fcluster,complete
-from scipy.spatial.distance import pdist
+from scipy.cluster.hierarchy import dendrogram, linkage,fcluster
 import matplotlib.pyplot as plt
+import numpy as np
+import ray
 from ..masks import mask_create
 
 def outlier_dect(actors,config_dict):
@@ -43,7 +43,7 @@ def outlier_dect(actors,config_dict):
     if config_dict['outlier']['dendrogram']:
         fig = plt.figure(figsize=(4, 4))
         ax = fig.add_subplot(111)
-        dendro =dendrogram(linked,
+        _ =dendrogram(linked,
                     orientation='left',
                     labels=line_names,
                     distance_sort='descending',
@@ -79,18 +79,3 @@ def subsample(hy_obj,outlier_dict):
         if ~band:
             X.append(hy_obj.get_band(band_num,mask='outlier'))
     return  np.array(X).T
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

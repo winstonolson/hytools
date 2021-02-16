@@ -39,7 +39,7 @@ def main():
 
     _ = ray.get([a.create_bad_bands.remote(config_dict['bad_bands']) for a in actors])
 
-    #Print outliter for now
+    #Print outlier for now
     if config_dict['outlier']['detect']:
         outliers = outlier_dect(actors,config_dict)
 

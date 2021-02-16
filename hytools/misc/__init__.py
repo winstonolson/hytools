@@ -3,3 +3,4 @@
 Miscellaneous functions
 """
 from .misc import *
+from .outlier import *

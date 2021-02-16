@@ -10,7 +10,7 @@ import glob
 import numpy as np
 
 #Output path for configuration file
-config_file = ".json"
+config_file = "/home/chlus/dev_hytools/ic_config.json"
 config_dict = {}
 
 #Only coefficients for good bands will be calculated

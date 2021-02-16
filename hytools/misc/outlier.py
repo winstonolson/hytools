@@ -61,7 +61,6 @@ def outlier_dect(actors,config_dict):
         for line in group:
             print(line[1])
 
-    # This should return a binary list with
     return clusters
 
 def subsample(hy_obj,outlier_dict):

@@ -60,6 +60,7 @@ def main():
         paths = glob.glob(os.path.join(input_dir, "*", "*brdf_coeffs*json"))
     elif args.product == "topo_brdf":
         paths = glob.glob(os.path.join(input_dir, "*", "*topo_brdf"))
+    paths.sort()
     print(",".join(paths))
 
 

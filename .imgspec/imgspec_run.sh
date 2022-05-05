@@ -103,4 +103,4 @@ else
 fi
 
 echo "Preparing outputs (matching product types, tarring, and gzipping)..."
-python prepare_outputs.py output $trait_models_dir
+python ${imgspec_dir}/prepare_outputs.py output $trait_models_dir

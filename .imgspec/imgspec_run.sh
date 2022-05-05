@@ -72,7 +72,7 @@ fi
 python ${imgspec_dir}/get_from_context.py trait_estimate_config > trait_estimate_config.json
 echo "Created trait_estimate_config.json file from \"trait_estimate_config\" parameter"
 
-trait_models_dir=""
+trait_model_dir=""
 
 if grep -q "file_type" trait_estimate_config.json; then
     # Download trait model repository
@@ -103,4 +103,4 @@ else
 fi
 
 echo "Preparing outputs (matching product types, tarring, and gzipping)..."
-python ${imgspec_dir}/prepare_outputs.py output $trait_models_dir
+python ${imgspec_dir}/prepare_outputs.py output $trait_model_dir

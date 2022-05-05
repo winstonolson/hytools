@@ -59,7 +59,7 @@ def main():
         # Match trait maps
         if len(sys.argv) > 2 and len(sys.argv[2]) > 0:
             trait_models_dir = sys.argv[2]
-            trait_files = glob.glob(f"{trait_models_dir}/*.json")
+            trait_files = glob.glob(os.path.join(trait_models_dir, "*.json"))
             trait_names = []
             for file in trait_files:
                 # Read trait names from files

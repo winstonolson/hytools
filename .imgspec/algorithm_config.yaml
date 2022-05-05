@@ -4,7 +4,7 @@ algo_name: hytools
 version: cwl-dev
 environment: ubuntu
 repository_url: https://github.com/winstonolson/hytools.git
-docker_url: registry.imgspec.org/root/ade_base_images/vanilla:1.0
+docker_url: mas.dit.maap-project.org/root/maap-workspaces/base_images/vanilla:dit
 
 # fill out these fields
 # explain what this algorithm does

@@ -25,6 +25,9 @@ hytools_dir=$(dirname ${imgspec_dir})
 input="input"
 mkdir -p output
 
+# Activate conda environment
+source activate hytools
+
 # Get input paths for image correct
 echo "Looking for input granule gzips and extracting if necessary..."
 rfl_files=$(python ${imgspec_dir}/get_paths_from_granules.py -p rfl)

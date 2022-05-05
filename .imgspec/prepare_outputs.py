@@ -44,17 +44,18 @@ def main():
         crfl_files += [os.path.basename(f) for f in glob.glob(f"{output_dir}/{prefix}*brdf.hdr")]
         crfl_files += [os.path.basename(f) for f in glob.glob(f"{output_dir}/{prefix}*glint")]
         crfl_files += [os.path.basename(f) for f in glob.glob(f"{output_dir}/{prefix}*glint.hdr")]
-        # Create folder for product, then move and rename files
-        product_dir = f"{prefix}_crfl"
-        os.makedirs(os.path.join(output_dir, product_dir))
-        for file in crfl_files:
-            if file.endswith(".hdr"):
-                shutil.move(f"{output_dir}/{file}", os.path.join(output_dir, product_dir, f"{prefix}_crfl.hdr"))
-            else:
-                shutil.move(f"{output_dir}/{file}", os.path.join(output_dir, product_dir, f"{prefix}_crfl"))
-        # Tar and gzip, then remove product dir
-        subprocess.run(f"cd {output_dir}; tar czvf {product_dir}.tar.gz {product_dir}; rm -rf {product_dir}",
-                       shell=True)
+        if len(crfl_files) > 0:
+            # Create folder for product, then move and rename files
+            product_dir = f"{prefix}_crfl"
+            os.makedirs(os.path.join(output_dir, product_dir))
+            for file in crfl_files:
+                if file.endswith(".hdr"):
+                    shutil.move(f"{output_dir}/{file}", os.path.join(output_dir, product_dir, f"{prefix}_crfl.hdr"))
+                else:
+                    shutil.move(f"{output_dir}/{file}", os.path.join(output_dir, product_dir, f"{prefix}_crfl"))
+            # Tar and gzip, then remove product dir
+            subprocess.run(f"cd {output_dir}; tar czvf {product_dir}.tar.gz {product_dir}; rm -rf {product_dir}",
+                           shell=True)
 
         # Match trait maps
         if len(sys.argv) > 2 and len(sys.argv[2]) > 0:

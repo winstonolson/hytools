@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# Description:
+#
+# The top-level run script to execute HyTools on ImgSPEC. This script accepts the inputs described in the
+# algorithm_config.yaml file and pre-processes them as needed to pass into hytools/scripts/image_correct.py and/or
+# hytools/scripts/trait_estimate.py. This script is currently compatible with AVIRIS Classic, AVIRIS-NG, and PRISMA
+# data.
+#
+# Inputs:
+#
+# $1: URL to a trait models repository (eg. https://github.com/EnSpec/AVIRIS-C_trait_models/archive/refs/heads/main.zip)
+#
+# In addition to the positional arguments, this script expects downloaded radiance granules and matching reflectance
+# granules to be present in a folder called "input".
+#
+# Also, if the user supplies an image correction config dictionary as one of the inputs then the image correction step
+# will be run.  If the user supplies a trait estimate config dictionary, then the trait estimate step will be run. These
+# dictionaries are passed into this script using the get_from_context.py script below.
+
+
 imgspec_dir=$( cd "$(dirname "$0")" ; pwd -P )
 hytools_dir=$(dirname ${imgspec_dir})
 
@@ -20,6 +39,7 @@ ulimit -n 8192
 python ${imgspec_dir}/get_from_context.py image_correct_config > image_correct_config.json
 echo "Created image_correct_config.json file from \"image_correct_config\" parameter"
 
+# Check if "file_type" exists to determine if we have a non-blank image correct config
 if grep -q "file_type" image_correct_config.json; then
     python $imgspec_dir/update_config.py image_correct_config.json image_correct $rfl_files $obs_ort_files
     echo "Updated image_correct_config.json with input paths and num_cpus based on number of images"
@@ -49,12 +69,14 @@ fi
 python ${imgspec_dir}/get_from_context.py trait_estimate_config > trait_estimate_config.json
 echo "Created trait_estimate_config.json file from \"trait_estimate_config\" parameter"
 
+trait_models_dir=""
+
 if grep -q "file_type" trait_estimate_config.json; then
     # Download trait model repository
     trait_model_dir="trait_models"
     mkdir -p $trait_model_dir
-    wget $1
     zip_file=$(basename $1)
+    curl --retry 10 -L --output $zip_file $1
     if [[ $1 == *zip ]]; then
         unzip $zip_file -d $trait_model_dir
     fi
@@ -76,3 +98,6 @@ if grep -q "file_type" trait_estimate_config.json; then
 else
     echo "### trait_estimate_config.json is empty. Not running trait estimate step"
 fi
+
+echo "Preparing outputs (matching product types, tarring, and gzipping)..."
+python prepare_outputs.py output $trait_models_dir

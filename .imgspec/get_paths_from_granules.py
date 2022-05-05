@@ -45,7 +45,7 @@ def main():
     paths = []
     if args.product == "obs_ort":
         # AVIRIS SDS uses *obs_ort for distributed files
-        paths = glob.glob(os.path.join(input_dir, "*rdn*", "*obs_ort"))
+        paths = glob.glob(os.path.join(input_dir, "*", "*obs_ort"))
         # PRISMA uses *obs_proj
         paths += glob.glob(os.path.join(input_dir, "*", "*obs_prj"))
     elif args.product == "rfl":
@@ -55,9 +55,9 @@ def main():
         # ISOFIT uses *rfl for processed reflectance files
         paths += glob.glob(os.path.join(input_dir, "*", "*rfl"))
     elif args.product == "topo_coeffs":
-        paths = glob.glob(os.path.join(input_dir, "*topo_coeffs*", "*topo_coeffs*json"))
+        paths = glob.glob(os.path.join(input_dir, "*", "*topo_coeffs*json"))
     elif args.product == "brdf_coeffs":
-        paths = glob.glob(os.path.join(input_dir, "*brdf_coeffs*", "*brdf_coeffs*json"))
+        paths = glob.glob(os.path.join(input_dir, "*", "*brdf_coeffs*json"))
     elif args.product == "topo_brdf":
         paths = glob.glob(os.path.join(input_dir, "*", "*topo_brdf"))
     print(",".join(paths))

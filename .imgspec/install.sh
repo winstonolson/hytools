@@ -8,11 +8,8 @@ set -x
 imgspec_dir=$( cd "$(dirname "$0")" ; pwd -P )
 hytools_dir=$(dirname ${imgspec_dir})
 
-# Install unzip
-apt install -y unzip
-
 # Create conda env
-conda create -n hytools -y -c conda-forge python=3.7
+conda create -n hytools -y -c conda-forge unzip python=3.7
 source activate hytools
 
 # Run pip install in developer mode
